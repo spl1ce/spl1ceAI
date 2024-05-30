@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-import utils
+from utils import utils
 import json
 import os
 
@@ -23,7 +23,7 @@ class Bot(commands.Bot):
         
         print('Bot is setup.')
 
-bot = Bot(command_prefix=":", activity=discord.Activity(type = discord.ActivityType.playing, name="In development"), intents=intents)
+bot = Bot(command_prefix=":", activity=discord.Activity(type = discord.ActivityType.playing, name="with you"), intents=intents)
 
 ############################
 # Bot boot events          #
@@ -31,7 +31,6 @@ bot = Bot(command_prefix=":", activity=discord.Activity(type = discord.ActivityT
 
 @bot.event
 async def on_ready():
-    bot.get_command("user status").update(enabled=False)
     print('Bot is ready.')
 
 @bot.event
@@ -48,7 +47,9 @@ async def on_connect():
 async def reload(ctx, extension):
 
     await bot.reload_extension(f'cogs.{extension}')
-    embed = utils.confirmation_embed(f'```🔄 Reloaded cogs.{extension} ```')
+    embed = utils.confirmation_embed
+    embed.description=f'```🔄 Reloaded cogs.{extension} ```'
+
 
     await ctx.reply(embed=embed, ephemeral=True)
 
@@ -60,10 +61,10 @@ async def reload(ctx, extension):
 async def sync(ctx: commands.Context):
 
     synced = await ctx.bot.tree.sync()
-    embed = utils.confirmation_embed(f"Synced {len(synced)} commands 'globally'")
+    embed = utils.confirmation_embed
+    embed.description=f"Synced {len(synced)} commands 'globally'"
 
     await ctx.reply(embed=embed, ephemeral=True)
-    return
 
 
 
@@ -71,3 +72,6 @@ async def sync(ctx: commands.Context):
 async def handler(ctx, error):
     if isinstance(error, commands.NotOwner):
         pass
+
+
+bot.run(key["token"])

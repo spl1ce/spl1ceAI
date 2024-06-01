@@ -72,6 +72,8 @@ async def sync(ctx: commands.Context):
 async def handler(ctx, error):
     if isinstance(error, commands.NotOwner):
         pass
+    else:
+        print(error)
 
 
 bot.run(key["token"])
